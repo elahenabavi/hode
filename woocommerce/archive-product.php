@@ -151,6 +151,12 @@ do_action('woocommerce_after_main_content');
  */
 // do_action('woocommerce_sidebar');
   ?>
+    <div class="flex justify-center *:rounded-lg *:text-center *:mx-2 *:text-sm mt-9 ">
+      <button disabled class="border border-gray-400 text-gray-400 bg-zinc-50 disabled py-2 px-3.5   disabled:opacity-50">قبلی</button>
+      <button class="border border-blue-500 bg-blue-500 text-white py-2 px-4.5">1</button>
+      <button class="border border-gray-400 text-gray-400 bg-zinc-50 py-2 px-4.5">2</button>
+      <button class="border border-gray-400 bg-zinc-50 text-gray-400 py-2 px-3">بعدی</button>
+  </div>
   <div class="mb-100"></div> 
   <?php 
 get_footer('shop'); 

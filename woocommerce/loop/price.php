@@ -28,8 +28,8 @@ $offPercent = 100 * ($regularPrice - $price) / $price
 ?>
 
 <?php if ($price_html = $product->get_price_html()) : ?>
-	<span class="flex gap-2 items-center mb-3">
-		<?php if ($offPercent): ?><span class="bg-red-600 text-white px-1 rounded-md">
+	<span class="flex gap-2 items-center mb-5 mt-4">
+		<?php if ($offPercent): ?><span class="bg-red-600 text-white px-2 rounded-md">
 				<?= toPersianNumerals(number_format($offPercent)) ?>%
 			</span>
 		<?php endif; ?>

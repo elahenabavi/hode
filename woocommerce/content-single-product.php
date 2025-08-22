@@ -130,7 +130,7 @@ wp_reset_postdata();?>
 			<?php if($regularPrice != $price): ?>
             <p class="text-gray-400 line-through self-center ml-1"><?php echo toPersianNumerals(number_format($regularPrice)) ?></p>
 			<?php endif?>
-            <?php if ($offPercent): ?><span class="bg-red-600 text-white px-1 rounded-md">
+            <?php if ($offPercent): ?><span class="bg-red-600 text-white px-2 rounded-md ml-9">
 				<?= toPersianNumerals(number_format($offPercent)) ?>%
 			</span>
 		<?php endif; ?> 
