@@ -16,7 +16,7 @@
             } ?>
             <?php wp_nav_menu([
                 "theme_location" => 'Header',
-                "menu_class" => "main-nav flex grow gap-3",
+                "menu_class" => "main-nav flex grow gap-3 text-gray-600",
                 "container" => false
             ]);
             ?>
