@@ -8,9 +8,6 @@ remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_pro
 add_filter('woocommerce_enqueue_styles', '__return_false');
 remove_action('woocommerce_single_product_summary','woocommerce_template_single_title',5);
 
-
-
-
 function mytheme_setup()
 {
   add_theme_support('post-thumbnails');
