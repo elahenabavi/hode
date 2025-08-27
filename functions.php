@@ -74,9 +74,6 @@ add_action('customize_register', function ($wp_customize) {
   ]);
 });
 
-
-
-
 function hodcode_enqueue_styles()
 {
   wp_enqueue_style(
@@ -94,6 +91,8 @@ function hodcode_enqueue_styles()
     "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4", // This gets style.css in the root of the theme
 
   );
+
+wp_enqueue_script('main-js', get_template_directory_uri() . '/main.js', [], null, true);
 }
 add_action('wp_enqueue_scripts', 'hodcode_enqueue_styles');
 
@@ -184,3 +183,13 @@ function hodcode_add_custom_field($fieldName, $postType, $title)
     }
   });
 }
+
+// حذف دسته پیش فرض ووکامرس در سمت فرانت
+add_filter( 'get_terms', function( $terms, $taxonomies, $args ) {
+    if ( in_array( 'product_cat', $taxonomies ) && ! is_admin() ) {
+        $terms = array_filter( $terms, function( $term ) {
+            return $term->slug !== 'uncategorized';
+        });
+    }
+    return $terms;
+}, 10, 3 );

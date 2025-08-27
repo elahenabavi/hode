@@ -94,3 +94,46 @@ a.added_to_cart.wc-forward {
 a.added_to_cart.wc-forward:hover {
     background: #7092C5 !important;
 }
+
+.bg-pr1{
+    background-color:#c9a6df ;
+}
+.bg-bl{
+    background-color: #2e2e2e;
+}
+.bg-wh1{
+    background-color: #fafafa;
+}
+.bg-wh2{
+    background-color: #f8f8f8;
+}
+
+.bg-pr2{
+    background-color: #a889d9;
+}
+.bg-pr3{
+    background-color: #6d4caf;
+}
+.bg-si{
+    background-color: #c0c0c0;
+}
+.txt-gr1{
+    color: #4a4a4a;
+
+}
+
+.header-pic{
+background-image: url("assets/wave-haikei\ \(8\).svg") !important;
+}
+
+.shadowbox{
+    box-shadow: 0 -10px 15px -3px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+
+/* @media (min-width: 1024px) {
+  .header-pic {
+      background-image: url("assets/wave-haikei\ \(1\).svg") !important; 
+  }
+}
+ */
