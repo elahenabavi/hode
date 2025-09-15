@@ -1,4 +1,6 @@
 <?php
+session_start();
+$_SESSION["pay"]="no";
 // removing woo stylings
 add_filter('woocommerce_enqueue_styles', '__return_false');
 add_filter( 'woocommerce_product_add_to_cart_text', 'custom_add_to_cart_text' );
@@ -42,8 +44,8 @@ function hodcode_woo_cats()
     'hide_empty' => false, // include empty categories
   ]);
 
-  $activeClasses = 'bg-blue1 text-white';
-  $defaultClasses = 'text-gray-700 hover:bg-blue-500 bg-white';
+  $activeClasses = 'bg-[#4a4a4a] text-[#fafafa]';
+  $defaultClasses = 'text-[#4a4a4a] hover:bg-[#c0c0c0] hover:border-[#c0c0c0] hover:text-[#fafafa] bg-[#fafafa]';
   if (!empty($categories) && !is_wp_error($categories)) :
     // Get current active category ID (if on product category page)
     $current_cat_id = 0;
@@ -55,7 +57,7 @@ function hodcode_woo_cats()
 ?>
     <div class="flex flex-wrap gap-3 py-4">
       <a href="<?php echo bloginfo('url'); ?>"
-        class="border border-gray-400 px-4 py-2 rounded-full text-sm font-medium transition <?php echo $finalClasses; ?>">
+        class="border border-[#4a4a4a] px-4 py-2 rounded-full text-sm font-medium transition <?php echo $finalClasses; ?>">
         همه محصولات
       </a>
       <?php foreach ($categories as $category) :
@@ -64,7 +66,7 @@ function hodcode_woo_cats()
       ?>
         <a
           href="<?php echo esc_url(get_term_link($category)); ?>"
-          class="px-4 py-2 border border-gray-400 rounded-full text-sm font-medium transition <?php echo $finalClasses; ?>">
+          class="px-4 py-2 border border-[#4a4a4a] rounded-full text-sm font-medium transition <?php echo $finalClasses; ?>">
           <?php echo esc_html($category->name); ?>
         </a>
       <?php endforeach; ?>
@@ -77,7 +79,7 @@ function hodcode_woo_cats()
 add_filter('woocommerce_product_loop_start', 'hodcode_product_loop_start');
 function hodcode_product_loop_start()
 {
-  return '<ul class="list-none grid grid-cols-1 md:grid-cols-3 gap-4">';
+  return '<ul class="list-none grid grid-cols-2 lg:grid-cols-4 gap-4">';
 }
 
 add_filter('woocommerce_product_loop_end', 'hodcode_product_loop_end');
@@ -90,15 +92,26 @@ function hodcode_product_loop_end()
 add_filter('woocommerce_post_class', 'add_bootstrap_product_classes', 10, 2);
 function add_bootstrap_product_classes($classes, $product)
 {
-  $classes[] = 'list-none rounded-lg overflow-hidden bg-white'; // Adjust based on Bootstrap grid size (e.g., col-md-3, col-lg-4)
+  $classes[] = 'list-none rounded-lg overflow-hidden bg-[#fafafa]'; // Adjust based on Bootstrap grid size (e.g., col-md-3, col-lg-4)
   return $classes;
 }
+
+
+
+
+
+
+
+
+
+
 
 // Adding card below image paddings
 add_action("woocommerce_before_shop_loop_item_title", "hodcode_product_loop_item_details_wrapper", 40);
 function hodcode_product_loop_item_details_wrapper()
 {
-  echo '<div class="p-3">';
+  
+  
 }
 add_action("woocommerce_after_shop_loop_item", "hodcode_product_loop_item_details_wrapper_close", 40);
 function hodcode_product_loop_item_details_wrapper_close()
@@ -140,11 +153,11 @@ add_filter('woocommerce_loop_add_to_cart_args', function ($args, $product) {
 }, 10, 2);
 
 // Buttons section
-add_action("woocommerce_after_shop_loop_item_title", "hodcode_product_link_section_wrapper", 11);
+/* add_action("woocommerce_after_shop_loop_item_title", "hodcode_product_link_section_wrapper", 11);
 function hodcode_product_link_section_wrapper()
 {
   echo '<div class="grid grid-cols-2 justify-center items-center gap-2">';
-}
+} */
 add_action("woocommerce_after_shop_loop_item", "hodcode_product_link_section_wrapper_close", 11);
 function hodcode_product_link_section_wrapper_close()
 {
@@ -172,24 +185,20 @@ remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_lo
 add_action('woocommerce_after_shop_loop_item_title', 'hodcode_template_loop_price');
 function hodcode_template_loop_price()
 {
-  global $product;
 
-  $price = ($product->get_price());
-  $regularPrice = ($product->get_regular_price());
-  $offPercent = 100 * ($regularPrice - $price) / $price
-?>
-
-  <span class="flex gap-2 items-center mb-3">
-    <?php if ($offPercent): ?><span class="bg-red-600 text-white px-1 rounded-md">
-        <?= toPersianNumerals(number_format($offPercent)) ?>%
-      </span>
-    <?php endif; ?>
-    <span class="grow"></span>
-    <?php if ($offPercent): ?>
-      <span class="text-gray-300 line-through"><?= toPersianNumerals(number_format($regularPrice)) ?></span>
-    <?php endif; ?>
-    <span class=""><?= toPersianNumerals(number_format($price)) ?></span>
-    <span class="">تومان</span>
-  </span>
-<?php
+				global $product;
+                $price = ($product->get_price());
+                $regularPrice = ($product->get_regular_price());
+                $offPercent = 100 * ($regularPrice - $price) / $price
+            ?>
+        	<sub class="text-xs txt-pr2 ">تومان</sub>
+            <p class="mx-2 font-bold text-lg txt-gr1 "><?php echo toPersianNumerals(number_format($price)) ?></p>
+            <?php if($regularPrice != $price): ?>
+            	<p class="txt-gr1 line-through self-center ml-1"><?php echo toPersianNumerals(number_format($regularPrice)) ?></p>
+            <?php endif?>
+            <?php if ($offPercent): ?>
+				<span class="bg-red-600 text-white px-2 rounded-md ml-9">
+                <?php echo toPersianNumerals(number_format($offPercent)) ?>%
+                </span>
+            <?php endif;  
 }

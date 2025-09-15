@@ -26,7 +26,7 @@ $aria_describedby = isset( $args['aria-describedby_text'] ) ? sprintf( 'aria-des
 echo apply_filters(
 	'woocommerce_loop_add_to_cart_link', // WPCS: XSS ok.
 	sprintf(
-		'<a href="%s" %s data-quantity="%s" class="bg-blue2 justify-center text-white rounded-lg overflow-hidden flex p-2 font-light text-sm %s" %s>%s</a>',
+		'<a href="%s" %s data-quantity="%s" class=" justify-center text-white rounded-lg overflow-hidden flex p-2 font-light   text-sm %s" %s>%s</a>',
 		esc_url( $product->add_to_cart_url() ),
 		$aria_describedby,
 		esc_attr( isset( $args['quantity'] ) ? $args['quantity'] : 1 ),

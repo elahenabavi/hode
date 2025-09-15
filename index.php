@@ -1,9 +1,7 @@
 
-
-
-
 <?php 
-
+session_start();
+$_SESSION["pay"]="no";
 get_header();
 ?>
 
@@ -16,13 +14,8 @@ get_header();
     ]);
     
     
-    ?><div class="flex justify-center my-3 mt-6">
-      <p class="font-semibold text-gray-700 text-xl">ارتباط با ما</p>
-      </div>
-      <div class="flex justify-center my-3 mb-6">
-      <p class="text-sm text-gray-500">درصورت داشتن سوال یا بروز مشکل در سایت از طریق فرم زیر با ما در ارتباط باشید.</p>
-      </div>
-    <main id="main" class="site-main mx-auto max-w-160 bg-white rounded-xl p-5">
+    ?>
+    <main id="main" class="">
 
       <?php
       if ( have_posts() ) {
