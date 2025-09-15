@@ -34,58 +34,7 @@ function create_faq_cpt() {
 }
 add_action('init', 'create_faq_cpt');
 
-
-
-/* 
-add_action('wp_ajax_reserve_product', 'handle_product_reservation');
-function handle_product_reservation() {
-    global $wpdb;
-
-    $user_id    = intval($_POST['user_id']);
-    $product_id = intval($_POST['product_id']);
-    $deposit    = floatval($_POST['deposit']);
-    $days       = intval($_POST['days']);
-
-    // بررسی موجودی
-    $wallet = $wpdb->get_row($wpdb->prepare("SELECT balance, locked FROM wp_user_wallet WHERE user_id = %d", $user_id));
-    if (!$wallet || $wallet->balance < $deposit) {
-        wp_send_json(['success' => false, 'message' => 'موجودی کافی نیست']);
-    }
-
-    // بروزرسانی کیف پول
-    $new_balance = $wallet->balance - $deposit;
-    $new_locked  = $wallet->locked + $deposit;
-    $wpdb->update('wp_user_wallet', [
-        'balance' => $new_balance,
-        'locked'  => $new_locked
-    ], ['user_id' => $user_id]);
-
-    // ثبت رزرو
-    $start_date  = current_time('mysql');
-    $expire_date = date('Y-m-d H:i:s', strtotime("+$days days"));
-    $wpdb->insert('wp_user_reservations', [
-        'user_id'     => $user_id,
-        'product_id'  => $product_id,
-        'deposit'     => $deposit,
-        'days'        => $days,
-        'start_date'  => $start_date,
-        'expire_date' => $expire_date,
-        'status'      => 'active'
-    ]);
-
-    // ثبت تراکنش
-    $wpdb->insert('wp_user_transactions', [
-        'user_id'         => $user_id,
-        'type'            => 'reserve',
-        'amount'          => $deposit,
-        'description'     => "رزرو محصول $product_id ($days روز)",
-        'transaction_date'=> current_time('mysql')
-    ]);
-
-    wp_send_json(['success' => true, 'message' => "رزرو با موفقیت انجام شد و مبلغ $deposit تومان بلوکه شد ✅"]);
-}
-
- */
+ /* اپدیت پروفایل کاربر */
 /*  */add_action('wp_ajax_update_user_profile', function(){
   $user_id = get_current_user_id();
   $name = sanitize_text_field($_POST['name']);
@@ -101,7 +50,7 @@ function handle_product_reservation() {
 });
 
 
-
+/* کیف پول */
 
 add_action('wp_ajax_charge_wallet', function(){
     global $wpdb;
@@ -152,190 +101,7 @@ add_action('wp_ajax_charge_wallet', function(){
     ]);
 });
 
-/*  *//* add_action('wp_ajax_charge_wallet', function(){
-  global $wpdb;
-  $user_id = get_current_user_id();
-  $amount = floatval($_POST['amount']);
-
-  $wallet = $wpdb->get_row($wpdb->prepare("SELECT balance FROM wp_user_wallet WHERE user_id = %d", $user_id));
-  $new_balance = $wallet ? $wallet->balance + $amount : $amount;
-
-  $wpdb->update('wp_user_wallet', ['balance' => $new_balance], ['user_id' => $user_id]);
-
-  $wpdb->insert('wp_user_transactions', [
-    'user_id' => $user_id,
-    'type' => 'credit',
-    'amount' => $amount,
-    'description' => 'شارژ کیف پول (پرداخت تستی)',
-    'transaction_date' => current_time('mysql')
-  ]);
-
-  wp_send_json([
-    'success' => true,
-    'transaction' => [
-      'type' => 'credit',
-      'amount' => $amount,
-      'desc' => 'شارژ کیف پول (پرداخت تستی)',
-      'date' => current_time('mysql')
-    ],
-    'message' => "کیف پول شما به مبلغ {$amount} تومان با موفقیت شارژ شد ✅"
-  ]);
-});
-
- */
-/* add_action('wp_ajax_buy_subscription', function(){
-  global $wpdb;
-  $user_id = get_current_user_id();
-  $plan = sanitize_text_field($_POST['plan']);
-
-  $plans = [
-    'silver' => ['price' => 500000, 'duration' => 30],
-    'gold'   => ['price' => 1200000, 'duration' => 365]
-  ];
-  if(!isset($plans[$plan])) {
-    wp_send_json(['success' => false, 'message' => 'پلن نامعتبر است']);
-  }
-  $price = $plans[$plan]['price'];
-  $duration = $plans[$plan]['duration'];
-  $wallet = $wpdb->get_row($wpdb->prepare("SELECT balance FROM wp_user_wallet WHERE user_id = %d", $user_id));
-  if(!$wallet || $wallet->balance < $price){
-    wp_send_json(['success' => false, 'message' => 'موجودی کافی نیست']);
-  }
-  $wpdb->update('wp_user_wallet', ['balance' => $wallet->balance - $price], ['user_id' => $user_id]);
-  $start = current_time('mysql');
-  $end = date('Y-m-d H:i:s', strtotime("+$duration days"));
-  $wpdb->insert('wp_user_subscriptions', [
-    'user_id' => $user_id,
-    'plan' => $plan,
-    'start_date' => $start,
-    'end_date' => $end,
-    'status' => 'active'
-  ]);
-  $plan_titles = [
-    'silver' => 'نقره‌ای',
-    'gold'   => 'طلایی'
-  ];
-  $plan_title = isset($plan_titles[$plan]) ? $plan_titles[$plan] : $plan;
-  $wpdb->insert('wp_user_transactions', [
-    'user_id' => $user_id,
-    'type' => 'debit',
-    'amount' => $price,
-    'description' => "خرید اشتراک {$plan_title} (کیف پول)",
-    'transaction_date' => $start
-  ]);
-  wp_send_json([
-    'success' => true,
-    'subscription' => [
-      'plan' => $plan,
-      'title' => $plan_title,
-      'start' => $start,
-      'end' => $end
-    ],
-    'transaction' => [
-      'type' => 'debit',
-      'amount' => $price,
-      'desc' => "خرید اشتراک {$plan_title} (کیف پول)",
-      'date' => $start
-    ],
-    'message' => "اشتراک پلن {$plan_title} با موفقیت فعال شد ✅"
-  ]);
-});
- 
- */
-
-
-
-/* 
-
-add_action('wp_ajax_buy_subscription', function() {
-    global $wpdb;
-    $user_id = get_current_user_id();
-    $plan = sanitize_text_field($_POST['plan'] ?? '');
-
-    // لیست پلن‌ها
-    $plans = [
-        'silver' => ['price' => 500000, 'duration' => 30],
-        'gold'   => ['price' => 1200000, 'duration' => 365]
-    ];
-
-    if (!isset($plans[$plan])) {
-        wp_send_json(['success' => false, 'message' => 'پلن نامعتبر است']);
-    }
-
-    // بررسی اشتراک فعال
-    $active_sub = $wpdb->get_row($wpdb->prepare("
-        SELECT plan, start_date, end_date 
-        FROM wp_user_subscriptions 
-        WHERE user_id = %d AND status = 'active'
-    ", $user_id));
-
-    if ($active_sub && strtotime($active_sub->end_date) > current_time('timestamp')) {
-        wp_send_json([
-            'success' => false,
-            'message' => "شما در حال حاضر اشتراک فعال دارید تا " . date('Y-m-d H:i', strtotime($active_sub->end_date))
-        ]);
-    }
-
-    $price = $plans[$plan]['price'];
-    $duration = $plans[$plan]['duration'];
-
-    // بررسی موجودی کیف پول
-    $wallet = $wpdb->get_row($wpdb->prepare("SELECT balance FROM wp_user_wallet WHERE user_id = %d", $user_id));
-    if (!$wallet || $wallet->balance < $price) {
-        wp_send_json(['success' => false, 'message' => 'موجودی کافی نیست']);
-    }
-
-    // کم کردن موجودی
-    $wpdb->update('wp_user_wallet', ['balance' => $wallet->balance - $price], ['user_id' => $user_id]);
-
-    // ثبت اشتراک
-    $start = current_time('mysql');
-    $end = date('Y-m-d H:i:s', strtotime("+$duration days"));
-    $wpdb->insert('wp_user_subscriptions', [
-        'user_id' => $user_id,
-        'plan' => $plan,
-        'start_date' => $start,
-        'end_date' => $end,
-        'status' => 'active'
-    ]);
-
-    // عنوان پلن
-    $plan_titles = [
-        'silver' => 'نقره‌ای',
-        'gold'   => 'طلایی'
-    ];
-    $plan_title = $plan_titles[$plan] ?? $plan;
-
-    // ثبت تراکنش
-    $wpdb->insert('wp_user_transactions', [
-        'user_id' => $user_id,
-        'type' => 'debit',
-        'amount' => $price,
-        'description' => "خرید اشتراک {$plan_title} (کیف پول)",
-        'transaction_date' => $start
-    ]);
-
-    // پاسخ موفق
-    wp_send_json([
-        'success' => true,
-        'subscription' => [
-            'plan' => $plan,
-            'title' => $plan_title,
-            'start' => $start,
-            'end' => $end
-        ],
-        'transaction' => [
-            'type' => 'debit',
-            'amount' => $price,
-            'desc' => "خرید اشتراک {$plan_title} (کیف پول)",
-            'date' => $start
-        ],
-        'message' => "اشتراک پلن {$plan_title} با موفقیت فعال شد ✅"
-    ]);
-});
-
-
- */
+/* خرید اشتراک */
 add_action('wp_ajax_buy_subscription', 'buy_subscription_callback');
 function buy_subscription_callback() {
     global $wpdb;
@@ -416,10 +182,7 @@ function buy_subscription_callback() {
 }
 
 
-
-
-
-
+/* رزرو محصول */
 add_action('wp_ajax_reserve_product', function(){
   global $wpdb;
   $user_id = get_current_user_id();
@@ -479,7 +242,7 @@ $product_name = get_the_title($product_id);
 });
 
 
-
+/* فرستادن تیکت */
 add_action('wp_ajax_submit_ticket', function(){
   global $wpdb;
   $user_id = get_current_user_id();
@@ -507,8 +270,8 @@ add_action('wp_ajax_submit_ticket', function(){
   ]);
 });
 
-add_action('wp_ajax_add_user_transaction', 'add_user_transaction_callback');
 
+add_action('wp_ajax_add_user_transaction', 'add_user_transaction_callback');
 function add_user_transaction_callback() {
   $user_id = get_current_user_id();
   if (!$user_id) {
@@ -652,13 +415,13 @@ if (!isset($wpdb)) {
 
 }
   }
-  // ذخیره خریدهای مدت‌دار
+
 
 
 }
 
 
-
+/* ثبت محصول */
 add_action('init', 'elahe_custom_checkout_redirect');
 
 function elahe_custom_checkout_redirect() {
@@ -767,7 +530,7 @@ add_shortcode('user_warranties', function(){
   return $html;
 });
 
-
+/* خرید مدت دار */
 add_shortcode('user_durable_purchases', function(){
   $user_id = get_current_user_id();
   global $wpdb;
@@ -799,22 +562,7 @@ add_shortcode('user_durable_purchases', function(){
   $html .= '</tbody></table>';
   return $html;
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* محاسبه تخفیفا */
 add_action('template_redirect', function(){
 
     if ( isset($_POST['test_direct_checkout']) ) {
@@ -937,254 +685,6 @@ add_action('template_redirect', function(){
         exit;
     }
 });
-
-/* فیلتر قیمت */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
-
-
-
-function render_user_dashboard() {
-    $user_id = get_current_user_id();
-    if (!$user_id) {
-        echo 'کاربر وارد نشده';
-        return;
-    }
-
-    // یوزرنیم
-    $user_info = get_userdata($user_id);
-    $username = $user_info->user_login;
-
-    // کیف پول
-    global $wpdb;
-    $wallet = $wpdb->get_row(
-        $wpdb->prepare("SELECT * FROM wp_user_wallet WHERE user_id = %d", $user_id)
-    );
-    $balance = $wallet ? $wallet->balance : 0;
-    $locked  = $wallet ? $wallet->locked : 0;
-
-    // HTML
-    ?>
-    <div class="dashboard  mt-2">
-        <p><?php echo number_format($balance); ?> تومان</p> 
-    </div>
-    <?php
-}
-// ================================
-// هندلر گرفتن اشتراک فعال کاربر
-// ================================
-function handle_get_active_subscription() {
- 
-global $wpdb;
-
-// گرفتن آی‌دی کاربر فعلی
-$user_id = get_current_user_id();
-if (!$user_id) {
-    echo 'کاربر وارد نشده';
-    return;
-}
-
-// گرفتن رکورد آخرین اشتراک فعال کاربر
-$subscription = $wpdb->get_row($wpdb->prepare(
-    "SELECT * FROM wp_user_subscriptions WHERE user_id=%d ORDER BY end_date DESC LIMIT 1",
-    $user_id
-));
-
-// بررسی اینکه رکورد وجود دارد
-if ($subscription) {
-    $subscription_id = $subscription->subscription_id;
-    $plan            = $subscription->plan;
-    $start_date      = $subscription->start_date;
-    $end_date        = $subscription->end_date;
-    $status          = $subscription->status;
-
-    // برای تست می‌توانیم چاپ کنیم
-    // echo "ID: $subscription_id, Plan: $plan, Start: $start_date, End: $end_date, Status: $status";
-} else {
-    $subscription_id = null;
-    $plan            = null;
-    $start_date      = null;
-    $end_date        = null;
-    $status          = null;
-}
-?>
-
-<div class="bg-white rounded-lg p-4 shadow-sm">
-        <div class="text-sm text-[var(--muted)]">اشتراک فعال</div>
-        <div class="text-lg font-medium">
-          <?php
-          if($plan=="gold"){
-            echo "طلایی";
-          }
-          elseif($plan=="silver"){
-            echo "نقره ای";
-          }
-          else 
-            echo "ندارید";
-          ?>
-        </div>
-        <div class="text-sm text-[var(--muted)]">
-          <?php 
-          if($plan=="gold" || $plan=="silver"){
-            echo 'پایان: '. "$end_date";
-          }
-          else
-            echo "اشتراک بخرید";
-          ?></div>
-        <div class="mt-3"><button class="px-3 py-1 border rounded-md text-sm text-indigo-600 border-indigo-200" onclick="renderPage('subscriptions')">مدیریت اشتراک</button></div>
-</div>
-<?php
-
-}
-
-// ================================
-// گرفتن آخرین تراکنش کاربر
-// ================================
-
-function type_of_transaction() {
- 
-    global $wpdb;
-    $plan='';
-    $user_id = get_current_user_id();
-    if (!$user_id) {
-        echo 'کاربر وارد نشده'; // کاربر وارد نشده
-        return;
-    }
-
-    $table_name = $wpdb->prefix . 'user_transactions';
-
-    $query = $wpdb->prepare(
-        "SELECT type, transaction_date FROM $table_name WHERE user_id = %d ORDER BY transaction_date DESC LIMIT 1",
-        $user_id
-    );
-
-    $transaction = $wpdb->get_row($query, ARRAY_A);
-
-    if (!$transaction) {
-        echo "تراکنشی وجود ندارد"; // تراکنشی پیدا نشد
-        return;
-    }
-    $subscription = $wpdb->get_row($wpdb->prepare(
-    "SELECT * FROM wp_user_subscriptions WHERE user_id=%d ORDER BY end_date DESC LIMIT 1",
-    $user_id
-    ));
-    if ($subscription) {
-    $plan  = $subscription->plan;
-    }
-    else {
-    echo "";
-}
-
-
-
-    if($plan=="gold")
-      $plantype="طلایی";
-    elseif($plan=="silver")
-      $plantype="نقره ای";
-    else
-      $plantype= "";
-
-    if ($transaction['type']=="credit"){
-      echo "شارژ کیف پول(پرداخت تستی)";
-    }
-    elseif ($transaction['type']=="debit")
-      echo "پرداخت";
-    elseif ($transaction['type']=="reserve")
-      echo "رزرو محصول";
-    elseif($transaction['type']=="subscription")
-      echo "خرید اشتراک $plantype";
-    
-}
-
-function date_of_transaction() {
-    global $wpdb;
-
-    $user_id = get_current_user_id();
-    if (!$user_id) {
-        echo "کاربر مشخص نیست"; // کاربر وارد نشده
-        return;
-    }
-
-    $table_name = $wpdb->prefix . 'user_transactions';
-
-    $query = $wpdb->prepare(
-        "SELECT type, transaction_date FROM $table_name WHERE user_id = %d ORDER BY transaction_date DESC LIMIT 1",
-        $user_id
-    );
-
-    $transaction = $wpdb->get_row($query, ARRAY_A);
-
-    if (!$transaction) {
-      
-        return NULL;
-    }
-   
-    echo  date('Y-m-d H:i', strtotime($transaction['transaction_date']));
-}
- */
-/* 
-add_action('wp_ajax_save_timed_option', 'save_timed_option_to_session');
-add_action('wp_ajax_nopriv_save_timed_option', 'save_timed_option_to_session');
-
-function save_timed_option_to_session() {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-
-    $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-    $timed_option = isset($_POST['timed_option']) ? sanitize_text_field($_POST['timed_option']) : '';
-
-    if ($product_id && $timed_option) {
-        $_SESSION['timed_option_' . $product_id] = $timed_option;
-        echo 'Saved for product ' . $product_id;
-    } else {
-        echo 'Nothing to save';
-    }
-    wp_die();
-}
- */
-
-
 
 function mytheme_setup()
 {

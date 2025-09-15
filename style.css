@@ -604,4 +604,9 @@ a.added_to_cart.wc-forward:hover{
     opacity: 1;
     pointer-events: auto;
   }
-  
+  /* پروفایل */
+    :root{--muted:#6b7280}
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:999px}
+    .toast-show{opacity:1 !important;}
+.rtl { direction: rtl; }

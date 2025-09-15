@@ -106,13 +106,6 @@ function add_bootstrap_product_classes($classes, $product)
 
 
 
-// Adding card below image paddings
-add_action("woocommerce_before_shop_loop_item_title", "hodcode_product_loop_item_details_wrapper", 40);
-function hodcode_product_loop_item_details_wrapper()
-{
-  
-  
-}
 add_action("woocommerce_after_shop_loop_item", "hodcode_product_loop_item_details_wrapper_close", 40);
 function hodcode_product_loop_item_details_wrapper_close()
 {
@@ -144,61 +137,12 @@ function hodcode_product_loop_item_category()
   </div>
 <?php
 }
-
-// add-to-card styling
-add_filter('woocommerce_loop_add_to_cart_args', function ($args, $product) {
-  $args['class'] .= ' bg-blue2 justify-center text-white rounded-lg overflow-hidden flex p-2 text-sm ';
-
-  return $args;
-}, 10, 2);
-
-// Buttons section
-/* add_action("woocommerce_after_shop_loop_item_title", "hodcode_product_link_section_wrapper", 11);
-function hodcode_product_link_section_wrapper()
-{
-  echo '<div class="grid grid-cols-2 justify-center items-center gap-2">';
-} */
 add_action("woocommerce_after_shop_loop_item", "hodcode_product_link_section_wrapper_close", 11);
 function hodcode_product_link_section_wrapper_close()
 {
   echo "</div >";
 }
-
-// Details product link
 remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open');
 remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close');
-add_action("woocommerce_after_shop_loop_item", "hodcode_product_link", 9);
-function hodcode_product_link()
-{
-?>
-  <div class="justify-center p-2 font-light text-sm bg-gray-200 text-gray rounded-lg flex text-center">
-    <?php woocommerce_template_loop_product_link_open() ?>
-    مشاهده جزئیات
-    <?php woocommerce_template_loop_product_link_close() ?>
-  </div>
-<?php
-}
-
-
 // Price formatting
 remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price');
-add_action('woocommerce_after_shop_loop_item_title', 'hodcode_template_loop_price');
-function hodcode_template_loop_price()
-{
-
-				global $product;
-                $price = ($product->get_price());
-                $regularPrice = ($product->get_regular_price());
-                $offPercent = 100 * ($regularPrice - $price) / $price
-            ?>
-        	<sub class="text-xs txt-pr2 ">تومان</sub>
-            <p class="mx-2 font-bold text-lg txt-gr1 "><?php echo toPersianNumerals(number_format($price)) ?></p>
-            <?php if($regularPrice != $price): ?>
-            	<p class="txt-gr1 line-through self-center ml-1"><?php echo toPersianNumerals(number_format($regularPrice)) ?></p>
-            <?php endif?>
-            <?php if ($offPercent): ?>
-				<span class="bg-red-600 text-white px-2 rounded-md ml-9">
-                <?php echo toPersianNumerals(number_format($offPercent)) ?>%
-                </span>
-            <?php endif;  
-}

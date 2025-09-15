@@ -270,48 +270,5 @@ if ($faq_query->have_posts()):
 </div>
 <?php endif; ?>
 </div>
-<style>
-/* RTL support */
-.rtl { direction: rtl; }
-</style>
-
-
 <?php get_footer()?>
-<script>
-let currentIndex = 1;
-displaySlide(currentIndex);
 
-function displaySlide(n) {
-  let slides = document.getElementsByClassName("slide");
-  let dots = document.getElementsByClassName("dot");
-  let slno = document.getElementById("slide-no");
-
-  if (n > slides.length) currentIndex = 1;
-  if (n < 1) currentIndex = slides.length;
-
-  for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-  for (let i = 0; i < dots.length; i++) dots[i].classList.remove("active");
-
-  slides[currentIndex - 1].style.display = "block";
-  dots[currentIndex - 1].classList.add("active");
-  slno.innerHTML = currentIndex + " / " + slides.length;
-}
-
-function changeSlide(n) {
-  displaySlide(currentIndex += n);
-}
-
-function currentSlide(n) {
-  displaySlide(currentIndex = n); 
-}
-// تغییر خودکار هر 5 ثانیه
-let autoSlide = setInterval(() => {
-  changeSlide(1);
-}, 5000);
-//ریست تایمر با کلیک
-function resetAutoSlide() {
-  clearInterval(autoSlide);
-  autoSlide = setInterval(() => {
-    changeSlide(1);
-  }, 3000); }
-</script>
