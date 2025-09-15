@@ -52,13 +52,11 @@ if ( ! $product ) {
 ?>
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( ' max-w-screen-lg mx-auto mb-15', $product ); ?>>
 </div>
-<div id="alertwalleterror" class="hidden fixed absolute bg-[#e35053] py-3 px-8 z-60 rounded-lg text-[#fafafa]"></div>
-<div id="alertwalletsuccess" class="hidden fixed absolute bg-[#74c69d] py-3 px-8 z-60 rounded-lg text-[#fafafa]"></div>
+<div id="alertwalleterror" class="hidden  bg-[#e35053] py-3 px-8 z-60 rounded-lg text-[#fafafa]"></div>
+<div id="alertwalletsuccess" class="hidden bg-[#74c69d] py-3 px-8 z-60 rounded-lg text-[#fafafa]"></div>
 <div class="max-w-[80%] mx-auto rtl">
   <div class="flex flex-col lg:flex-row gap-12">
     <!--  گالری محصول -->
-   
-
 <?php
 global $product;
 $gallery_ids = $product->get_gallery_image_ids();
