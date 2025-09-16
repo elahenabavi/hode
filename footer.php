@@ -186,24 +186,6 @@
  <p class="text-[#fafafa] text-sm mt-10 text-center">کلیه حقوق این وبسایت متعلق به فروشگاه لاسترا میباشد.©</p>
   
 </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
   function toggleFooterMenu(btn) {
     // فقط در موبایل اجرا بشه
@@ -223,9 +205,5 @@
     }
   }
 </script>
-
-
-
  </body>
-
  </html>

@@ -842,46 +842,7 @@ add_filter('woocommerce_get_availability', function($availability){
     return $availability;
 });
 add_action('init', function () {
-
-  // register_taxonomy('product_category', ['product'], [
-  //   'hierarchical'      => true,
-  //   'labels'            => [
-  //     'name'          => ('Product Categories'),
-  //     'singular_name' => 'Product Category'
-  //   ],
-  //   'rewrite'           => ['slug' => 'product-category'],
-  //   'show_in_rest' => true,
-
-  // ]);
-
-  // register_post_type('product', [
-  //   'public' => true,
-  //   'label'  => 'Products',
-
-  // //   'rewrite' => ['slug' => 'product'],
-  // //   'taxonomies' => ['product_category'],
-
-  //   'supports' => [
-  //     'title',
-  //     'editor',
-  //     'thumbnail',
-  //     'excerpt',
-  //     'custom-fields',
-  //   ],
-
-  //   'show_in_rest' => true,
-  // ]);
 });
-
-// hodcode_add_custom_field("price","product","Price (Final)");
-// hodcode_add_custom_field("old_price","product","Price (Before)");
-
-// add_action('pre_get_posts', function ($query) {
-//   if ($query->is_home() && $query->is_main_query() && !is_admin()) {
-//     $query->set('post_type', 'product');
-//   }
-// });
-
 function toPersianNumerals($input)
 {
   // English digits

@@ -124,7 +124,5 @@ if ( function_exists( 'woocommerce_pagination' ) ) {
     });
   });
 });
-
 </script>
-
 <?php get_footer(); ?>

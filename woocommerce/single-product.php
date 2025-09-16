@@ -172,16 +172,6 @@ $best_sellers = wc_get_products( $args );
     </svg>
   </button>
 </div>
-
-
-
-
-
-
-
-
-
-
 <?php
 get_footer( 'shop' );
 

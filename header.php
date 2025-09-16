@@ -76,7 +76,6 @@ session_start();
         </button>
     </form>
 </div>
-  
                 <?php
                 $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
                 ?>
@@ -112,8 +111,4 @@ session_start();
                   </a>
             </div>
         </div>
-
     </header>
-    <script>
- 
-</script>

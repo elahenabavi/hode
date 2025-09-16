@@ -1,26 +1,10 @@
 <?php
 session_start();
 $_SESSION["pay"]="no";
-
 defined('ABSPATH') || exit;
-
 get_header('shop');
-
 do_action('woocommerce_shop_loop_header');?>
-
-
-
-
-
-
-
-
-
-
-
-
 <?php
-
 // گرفتن دسته‌بندی‌ها
 $categories = get_terms([
     'taxonomy'   => 'product_cat',
@@ -35,7 +19,6 @@ if (is_tax('product_cat')) {
     $current_cat_id = get_queried_object_id();
 }
 ?>
-
 <div class="max-w-[80%] mx-auto md:mb-20 mb-15">
 	<div class="relative inline-block text-left mt-10  rounded-lg border border-1.5 border-[#c0c0c0] z-20">
   		<button id="filterToggle" type="button" class="inline-flex items-center gap-2 px-4 py-2 
@@ -86,7 +69,6 @@ if (is_tax('product_cat')) {
 				rounded-full lg:text-sm text-xs font-medium transition <?php echo $finalClasses; ?>">
                 همه محصولات
             </a>
-
             <?php foreach ($categories as $category) :
                 $is_active = ($category->term_id === $current_cat_id);
                 $finalClasses = $is_active ? $activeClasses : $defaultClasses;
@@ -125,24 +107,18 @@ if (wc_get_loop_prop('total')) {
         $has_products = true; // حداقل یک محصول وجود دارد
     }
 }
-
 // اگر هیچ محصولی نبود
 if (!$has_products) {
     echo '<p class="text-center mt-8 lg:col-span-4 md:col-span-3 col-span-2  font-semibold md:text-base lg:text-lg text-sm  text-[#4a4a4a]">در این دسته بندی محصولی وجود ندارد.</p>';
 }
 ?>
-
 </div>
 </div>
-
 <?php
 woocommerce_product_loop_end();
-
 do_action('woocommerce_after_shop_loop');
 do_action('woocommerce_after_main_content');?>
-
 <?php get_footer('shop'); ?>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const toggle = document.getElementById("filterToggle");

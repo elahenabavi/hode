@@ -357,17 +357,6 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
   </div>
 </div>
-<!-- محصولات مرتبط -->
-
-
-
-
-
-
-
-
-
-
 <script>
 //  تب‌ها
 const tabs = document.querySelectorAll('.tab');
@@ -443,28 +432,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 });
 
-/* محصولات مرتبط */
-
-
-
-
-
-
-
-
 </script>
-
-
-
-<style>
-
-
-
-
-</style>
-
-
-
 
 <?php
 
