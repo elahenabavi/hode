@@ -1,7 +1,6 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 ?>
-
 <div style="text-align:center; padding: 50px;">
   <h2 style="color:#6a2c91;">✅ سفارش شما با موفقیت ثبت شد</h2>
   <p>ممنون از خریدتون دوست عزیز 💜</p>
